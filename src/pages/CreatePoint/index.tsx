@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Map, TileLayer, Marker } from "react-leaflet";
 import { FiArrowLeft } from "react-icons/fi";
 
 import "./style.css";
@@ -43,6 +44,13 @@ const CreatePoint: React.FC = () => {
             <h2>Endereço</h2>
             <span>Selecione o endereço no mapa</span>
           </legend>
+          <Map center={[-12.5310771, -38.2981699]} zoom={20}>
+            <TileLayer
+              attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker position={[-12.5310771, -38.2981699]} />
+          </Map>
           <div className="field-group">
             <div className="field">
               <label htmlFor="uf">Estado</label>
