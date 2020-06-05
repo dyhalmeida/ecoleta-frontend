@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { Map, TileLayer, Marker } from "react-leaflet";
 import { FiArrowLeft } from "react-icons/fi";
 
 import itemsService from "../../services/items";
 import ufService from "../../services/uf";
+import cityService from "../../services/city";
 
 import IItem from "../../models/item";
 import Item from "../../components/Item";
@@ -15,6 +16,10 @@ import Logo from "../../assets/logo.svg";
 const CreatePoint: React.FC = () => {
   const [items, setItems] = useState<IItem[]>([]);
   const [ufs, setUfs] = useState<string[]>([]);
+  const [cities, setCities] = useState<string[]>([]);
+
+  const [selectedUf, setSelectedUf] = useState("0");
+  const [selectedCity, setSelectedCity] = useState("0");
 
   useEffect(() => {
     itemsService().subscribe((items) => setItems(items));
@@ -23,6 +28,11 @@ const CreatePoint: React.FC = () => {
   useEffect(() => {
     ufService().subscribe((states) => setUfs(states));
   }, []);
+
+  useEffect(() => {
+    if (selectedUf === "0") return;
+    cityService(selectedUf).subscribe((cities) => setCities(cities));
+  }, [selectedUf]);
 
   const handleItems = () => {
     return items.map((item) => (
@@ -36,6 +46,24 @@ const CreatePoint: React.FC = () => {
         {uf}
       </option>
     ));
+  };
+
+  const handleCities = () => {
+    return cities.map((city) => (
+      <option key={city} value={city}>
+        {city}
+      </option>
+    ));
+  };
+
+  const handleSelectUf = (e: ChangeEvent<HTMLSelectElement>) => {
+    const uf = e.target.value;
+    setSelectedUf(uf);
+  };
+
+  const handleSelectCity = (e: ChangeEvent<HTMLSelectElement>) => {
+    const city = e.target.value;
+    setSelectedCity(city);
   };
 
   return (
@@ -85,15 +113,26 @@ const CreatePoint: React.FC = () => {
           <div className="field-group">
             <div className="field">
               <label htmlFor="uf">Estado</label>
-              <select name="uf" id="uf">
+              <select
+                name="uf"
+                id="uf"
+                value={selectedUf}
+                onChange={handleSelectUf}
+              >
                 <option value="0">Selecione uma UF</option>
                 {handleUfs()}
               </select>
             </div>
             <div className="field">
               <label htmlFor="city">Cidade</label>
-              <select name="city" id="city">
+              <select
+                name="city"
+                id="city"
+                value={selectedCity}
+                onChange={handleCities}
+              >
                 <option value="0">Selecione uma cidade</option>
+                {handleCities()}
               </select>
             </div>
           </div>
