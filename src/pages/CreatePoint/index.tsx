@@ -29,6 +29,7 @@ const CreatePoint: React.FC = () => {
     whatsapp: "",
   });
 
+  const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [selectedUf, setSelectedUf] = useState("0");
   const [selectedCity, setSelectedCity] = useState("0");
   const [selectedPosition, setSelectedPosition] = useState<[number, number]>([
@@ -58,7 +59,14 @@ const CreatePoint: React.FC = () => {
 
   const handleItems = () => {
     return items.map((item) => (
-      <Item key={item.id} title={item.title} image_url={item.image_url} />
+      <Item
+        className={selectedItems.includes(item.id) ? "selected" : ""}
+        handleClick={handleSelectItem}
+        key={item.id}
+        id={item.id}
+        title={item.title}
+        image_url={item.image_url}
+      />
     ));
   };
 
@@ -95,6 +103,19 @@ const CreatePoint: React.FC = () => {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSelectItem = (id: number) => {
+    const alreadySelected = selectedItems.findIndex((item) => item === id);
+
+    if (alreadySelected >= 0) {
+      const filteredItems = selectedItems.filter((item) => item !== id);
+      setSelectedItems(filteredItems);
+      return;
+    }
+
+    setSelectedItems([...selectedItems, id]);
+    return;
   };
 
   return (
