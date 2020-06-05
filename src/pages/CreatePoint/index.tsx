@@ -129,7 +129,7 @@ const CreatePoint: React.FC = () => {
                 name="city"
                 id="city"
                 value={selectedCity}
-                onChange={handleCities}
+                onChange={handleSelectCity}
               >
                 <option value="0">Selecione uma cidade</option>
                 {handleCities()}
