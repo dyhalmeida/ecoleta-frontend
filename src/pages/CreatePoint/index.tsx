@@ -1,12 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Map, TileLayer, Marker } from "react-leaflet";
 import { FiArrowLeft } from "react-icons/fi";
+
+import itemsService from "../../services/items";
+import IItem from "../../models/item";
+import Item from "../../components/Item";
 
 import "./style.css";
 import Logo from "../../assets/logo.svg";
 
 const CreatePoint: React.FC = () => {
+  const [items, setItems] = useState<IItem[]>([]);
+
+  useEffect(() => {
+    itemsService().subscribe((items) => setItems(items));
+  }, []);
+
+  const handleItems = () => {
+    return items.map((item) => (
+      <Item key={item.id} title={item.title} image_url={item.image_url} />
+    ));
+  };
+
   return (
     <div id="page-create-point">
       <header>
@@ -71,32 +87,7 @@ const CreatePoint: React.FC = () => {
             <h2>Ítens de coleta</h2>
             <span>Selecione um ou mais ítens abaixo</span>
           </legend>
-          <ul className="items-grid">
-            <li>
-              <img src="http://localhost:3333/uploads/oleo.svg" alt="Oleo" />
-              <span>Oléo de cozinha</span>
-            </li>
-            <li className="selected">
-              <img src="http://localhost:3333/uploads/oleo.svg" alt="Oleo" />
-              <span>Oléo de cozinha</span>
-            </li>
-            <li>
-              <img src="http://localhost:3333/uploads/oleo.svg" alt="Oleo" />
-              <span>Oléo de cozinha</span>
-            </li>
-            <li>
-              <img src="http://localhost:3333/uploads/oleo.svg" alt="Oleo" />
-              <span>Oléo de cozinha</span>
-            </li>
-            <li>
-              <img src="http://localhost:3333/uploads/oleo.svg" alt="Oleo" />
-              <span>Oléo de cozinha</span>
-            </li>
-            <li>
-              <img src="http://localhost:3333/uploads/oleo.svg" alt="Oleo" />
-              <span>Oléo de cozinha</span>
-            </li>
-          </ul>
+          <ul className="items-grid">{handleItems()}</ul>
         </fieldset>
 
         <button type="submit">Cadastrar ponto de coleta</button>
