@@ -1,11 +1,13 @@
-import React, { useEffect, useState, ChangeEvent } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState, ChangeEvent, FormEvent } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { Map, TileLayer, Marker } from "react-leaflet";
 import { LeafletMouseEvent } from "leaflet";
 import { FiArrowLeft } from "react-icons/fi";
 
 import itemsService from "../../services/items";
 import ufService from "../../services/uf";
+import collectService from "../../services/collect";
+
 import cityService from "../../services/city";
 
 import IItem from "../../models/item";
@@ -15,6 +17,7 @@ import "./style.css";
 import Logo from "../../assets/logo.svg";
 
 const CreatePoint: React.FC = () => {
+  const history = useHistory();
   const [initialPosition, setInitialPosition] = useState<[number, number]>([
     0,
     0,
@@ -118,6 +121,29 @@ const CreatePoint: React.FC = () => {
     return;
   };
 
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const { name, email, whatsapp } = formData;
+    const uf = selectedUf;
+    const city = selectedCity;
+    const [latitude, longitude] = selectedPosition;
+    const items = selectedItems;
+
+    const data = {
+      image: "fake-image",
+      name,
+      email,
+      whatsapp,
+      uf,
+      city,
+      latitude,
+      longitude,
+      items,
+    };
+
+    collectService(data).subscribe(() => history.push("/"));
+  };
+
   return (
     <div id="page-create-point">
       <header>
@@ -127,7 +153,7 @@ const CreatePoint: React.FC = () => {
           Voltar para home
         </Link>
       </header>
-      <form>
+      <form onSubmit={handleSubmit}>
         <h1>
           Cadastro do <br /> ponto de coleta
         </h1>
