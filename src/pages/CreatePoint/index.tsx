@@ -15,6 +15,11 @@ import "./style.css";
 import Logo from "../../assets/logo.svg";
 
 const CreatePoint: React.FC = () => {
+  const [initialPosition, setInitialPosition] = useState<[number, number]>([
+    0,
+    0,
+  ]);
+
   const [items, setItems] = useState<IItem[]>([]);
   const [ufs, setUfs] = useState<string[]>([]);
   const [cities, setCities] = useState<string[]>([]);
@@ -38,6 +43,13 @@ const CreatePoint: React.FC = () => {
     if (selectedUf === "0") return;
     cityService(selectedUf).subscribe((cities) => setCities(cities));
   }, [selectedUf]);
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { latitude, longitude } = position.coords;
+      setInitialPosition([latitude, longitude]);
+    });
+  }, []);
 
   const handleItems = () => {
     return items.map((item) => (
@@ -112,11 +124,7 @@ const CreatePoint: React.FC = () => {
             <h2>Endereço</h2>
             <span>Selecione o endereço no mapa</span>
           </legend>
-          <Map
-            center={[-12.6093237, -38.3060312]}
-            zoom={15}
-            onclick={handleMapClick}
-          >
+          <Map center={initialPosition} zoom={15} onclick={handleMapClick}>
             <TileLayer
               attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
