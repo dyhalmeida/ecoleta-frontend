@@ -4,6 +4,8 @@ import { Map, TileLayer, Marker } from "react-leaflet";
 import { FiArrowLeft } from "react-icons/fi";
 
 import itemsService from "../../services/items";
+import ufService from "../../services/uf";
+
 import IItem from "../../models/item";
 import Item from "../../components/Item";
 
@@ -12,14 +14,27 @@ import Logo from "../../assets/logo.svg";
 
 const CreatePoint: React.FC = () => {
   const [items, setItems] = useState<IItem[]>([]);
+  const [ufs, setUfs] = useState<string[]>([]);
 
   useEffect(() => {
     itemsService().subscribe((items) => setItems(items));
   }, []);
 
+  useEffect(() => {
+    ufService().subscribe((states) => setUfs(states));
+  }, []);
+
   const handleItems = () => {
     return items.map((item) => (
       <Item key={item.id} title={item.title} image_url={item.image_url} />
+    ));
+  };
+
+  const handleUfs = () => {
+    return ufs.map((uf) => (
+      <option key={uf} value={uf}>
+        {uf}
+      </option>
     ));
   };
 
@@ -72,6 +87,7 @@ const CreatePoint: React.FC = () => {
               <label htmlFor="uf">Estado</label>
               <select name="uf" id="uf">
                 <option value="0">Selecione uma UF</option>
+                {handleUfs()}
               </select>
             </div>
             <div className="field">
