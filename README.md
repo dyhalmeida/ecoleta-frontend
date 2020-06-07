@@ -38,10 +38,10 @@ git clone https://github.com/dyhalmeida/ecoleta-frontend
 npm install
 ```
 
-### 💻 Start Ecoleta mobile
+### 💻 Start Ecoleta
 
 ```bash
-# Change the src / services / api.ts file to the ip that your api is running on
+# Change the src/services/api.ts file to the ip that your api is running on
 npm start
 ```
 
