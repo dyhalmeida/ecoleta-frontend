@@ -1,0 +1,6 @@
+[submodule "ecoleta-backend"]
+	path = ecoleta-backend
+	url = git@github.com:dyhalmeida/ecoleta-backend.git
+[submodule "ecoleta-mobile"]
+	path = ecoleta-mobile
+	url = git@github.com:dyhalmeida/ecoleta-mobile.git
